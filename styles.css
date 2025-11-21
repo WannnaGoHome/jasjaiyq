@@ -30,7 +30,7 @@ html[data-theme="light"] body {
   background-repeat: no-repeat;
 }
 html[data-theme="dark"] body {
-  background-image: url("./app_background_dark.png") !important;
+  background-image: url("./app_background_dark.jpg") !important;
   background-size: cover;
   background-position: center;
   background-attachment: fixed;

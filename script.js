@@ -1,4 +1,3 @@
-
 const tg = window.Telegram?.WebApp;
 tg?.expand();
 const telegramUser = tg?.initDataUnsafe?.user;
@@ -7,6 +6,7 @@ const telegramId = telegramUser?.id;
 function applyTheme() {
   document.documentElement.dataset.theme = tg?.colorScheme === 'dark' ? 'dark' : 'light';
 }
+
 applyTheme();
 tg?.onEvent('themeChanged', applyTheme);
 
@@ -875,127 +875,127 @@ document.addEventListener('visibilitychange', () => {
   else if (appState.currentState === 'game' || appState.currentState === 'game-open') startBg();
 });
 
-const countdownPlayedForQuiz = new Set();
+// const countdownPlayedForQuiz = new Set();
 
-function playCountdownVideoOncePerQuiz(quizId) {
-  return new Promise((resolve) => {
-    if (!quizId || countdownPlayedForQuiz.has(quizId)) {
-      resolve(false);
-      return;
-    }
+// function playCountdownVideoOncePerQuiz(quizId) {
+//   return new Promise((resolve) => {
+//     if (!quizId || countdownPlayedForQuiz.has(quizId)) {
+//       resolve(false);
+//       return;
+//     }
 
-    const overlay = document.getElementById('countdown-overlay');
-    const video = document.getElementById('countdown-video');
-    if (!overlay || !video) {
-      resolve(false);
-      return;
-    }
+//     const overlay = document.getElementById('countdown-overlay');
+//     const video = document.getElementById('countdown-video');
+//     if (!overlay || !video) {
+//       resolve(false);
+//       return;
+//     }
 
-    const wasBgPlaying = !SFX.bg?.paused;
-    stopBg();
-    overlay.classList.remove('hidden');
-    video.currentTime = 0;
+//     const wasBgPlaying = !SFX.bg?.paused;
+//     stopBg();
+//     overlay.classList.remove('hidden');
+//     video.currentTime = 0;
 
-    const onFinish = () => {
-      video.removeEventListener('ended', onFinish);
-      video.removeEventListener('error', onFinish);
-      overlay.classList.add('hidden');
-      countdownPlayedForQuiz.add(quizId);
+//     const onFinish = () => {
+//       video.removeEventListener('ended', onFinish);
+//       video.removeEventListener('error', onFinish);
+//       overlay.classList.add('hidden');
+//       countdownPlayedForQuiz.add(quizId);
 
-      if (wasBgPlaying) startBg(0.18);
+//       if (wasBgPlaying) startBg(0.18);
 
-      resolve(true);
-    };
+//       resolve(true);
+//     };
 
-    video.addEventListener('ended', onFinish);
-    video.addEventListener('error', onFinish);
+//     video.addEventListener('ended', onFinish);
+//     video.addEventListener('error', onFinish);
 
-    video.play().catch(() => {
-      onFinish();
-    });
-  });
-}
+//     video.play().catch(() => {
+//       onFinish();
+//     });
+//   });
+// }
 
-async function playEndQuizVideo() {
-  return new Promise((resolve) => {
-    const overlayId = "endquiz-overlay";
-    let overlay = document.getElementById(overlayId);
-    if (!overlay) {
-      overlay = document.createElement("div");
-      overlay.id = overlayId;
-      overlay.style.position = "fixed";
-      overlay.style.inset = "0";
-      overlay.style.zIndex = "9999";
-      overlay.style.background = "#000";
-      overlay.style.display = "flex";
-      overlay.style.alignItems = "center";
-      overlay.style.justifyContent = "center";
-      document.body.appendChild(overlay);
-    }
+// async function playEndQuizVideo() {
+//   return new Promise((resolve) => {
+//     const overlayId = "endquiz-overlay";
+//     let overlay = document.getElementById(overlayId);
+//     if (!overlay) {
+//       overlay = document.createElement("div");
+//       overlay.id = overlayId;
+//       overlay.style.position = "fixed";
+//       overlay.style.inset = "0";
+//       overlay.style.zIndex = "9999";
+//       overlay.style.background = "#000";
+//       overlay.style.display = "flex";
+//       overlay.style.alignItems = "center";
+//       overlay.style.justifyContent = "center";
+//       document.body.appendChild(overlay);
+//     }
 
-    let video = overlay.querySelector("video");
-    if (!video) {
-      video = document.createElement("video");
-      video.src = "./sfx/endquiz.mp4";
-      video.autoplay = true;
-      video.playsInline = true;
-      video.muted = false;
-      video.style.width = "100vw";
-      video.style.height = "100vh";
-      video.style.objectFit = "cover";
-      overlay.appendChild(video);
-    }
+//     let video = overlay.querySelector("video");
+//     if (!video) {
+//       video = document.createElement("video");
+//       video.src = "./sfx/endquiz.mp4";
+//       video.autoplay = true;
+//       video.playsInline = true;
+//       video.muted = false;
+//       video.style.width = "100vw";
+//       video.style.height = "100vh";
+//       video.style.objectFit = "cover";
+//       overlay.appendChild(video);
+//     }
 
-    const wasBgPlaying = !SFX.bg?.paused;
-    stopBg();
-    overlay.classList.remove("hidden");
+//     const wasBgPlaying = !SFX.bg?.paused;
+//     stopBg();
+//     overlay.classList.remove("hidden");
 
-    const cleanup = () => {
-      overlay.classList.add("hidden");
-      if (wasBgPlaying) startBg(0.18);
-      resolve(true);
-    };
+//     const cleanup = () => {
+//       overlay.classList.add("hidden");
+//       if (wasBgPlaying) startBg(0.18);
+//       resolve(true);
+//     };
 
-    const onFinish = () => {
-      video.removeEventListener("ended", onFinish);
-      video.removeEventListener("error", onFinish);
-      cleanup();
-    };
+//     const onFinish = () => {
+//       video.removeEventListener("ended", onFinish);
+//       video.removeEventListener("error", onFinish);
+//       cleanup();
+//     };
 
-    video.addEventListener("ended", onFinish);
-    video.addEventListener("error", cleanup);
-    video.play().catch(() => onFinish());
-  });
-}
+//     video.addEventListener("ended", onFinish);
+//     video.addEventListener("error", cleanup);
+//     video.play().catch(() => onFinish());
+//   });
+// }
 
-(function setupAntiScreenshot() {
-  const overlayId = 'anti-screenshot-overlay';
-  let overlay = document.getElementById(overlayId);
-  if (!overlay) {
-    overlay = document.createElement('div');
-    overlay.id = overlayId;
-    document.body.appendChild(overlay);
-  }
+// (function setupAntiScreenshot() {
+//   const overlayId = 'anti-screenshot-overlay';
+//   let overlay = document.getElementById(overlayId);
+//   if (!overlay) {
+//     overlay = document.createElement('div');
+//     overlay.id = overlayId;
+//     document.body.appendChild(overlay);
+//   }
 
-  let blurTimer = null;
-  const BLUR_ON_MS  = 0;   
-  const BLUR_OFF_MS = 120;   
+//   let blurTimer = null;
+//   const BLUR_ON_MS  = 0;   
+//   const BLUR_OFF_MS = 120;   
 
-  const setBlur = (on) => {
-    clearTimeout(blurTimer);
-    blurTimer = setTimeout(() => {
-      overlay.style.opacity = on ? '1' : '0';
-      document.documentElement.classList.toggle('is-screen-blurred', on);
-    }, on ? BLUR_ON_MS : BLUR_OFF_MS);
-  };
+//   const setBlur = (on) => {
+//     clearTimeout(blurTimer);
+//     blurTimer = setTimeout(() => {
+//       overlay.style.opacity = on ? '1' : '0';
+//       document.documentElement.classList.toggle('is-screen-blurred', on);
+//     }, on ? BLUR_ON_MS : BLUR_OFF_MS);
+//   };
 
-  window.addEventListener('blur', () => setBlur(true));
-  document.addEventListener('visibilitychange', () => {
-    setBlur(document.hidden);
-  });
+//   window.addEventListener('blur', () => setBlur(true));
+//   document.addEventListener('visibilitychange', () => {
+//     setBlur(document.hidden);
+//   });
 
-  window.addEventListener('focus', () => setBlur(false));
-  window.addEventListener('pageshow', () => setBlur(false));
-  window.addEventListener('pagehide', () => setBlur(true));
-  setBlur(document.hidden || !document.hasFocus());
-})();
+//   window.addEventListener('focus', () => setBlur(false));
+//   window.addEventListener('pageshow', () => setBlur(false));
+//   window.addEventListener('pagehide', () => setBlur(true));
+//   setBlur(document.hidden || !document.hasFocus());
+// })();

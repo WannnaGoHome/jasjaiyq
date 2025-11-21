@@ -12,7 +12,7 @@ tg?.onEvent('themeChanged', applyTheme);
 
 const I18N = {
   ru: {
-    app: { title: "🎯 Квиз-игра" },
+    app: { title: "Квиз-игра" },
     registration: {
       subtitle: "Зарегистрируйтесь для участия. Введите ваше имя и фамилию:",
       firstname_ph: "Введите фамилию",
@@ -63,7 +63,7 @@ const I18N = {
     }
   },
   en: {
-    app: { title: "🎯 Quiz Game" },
+    app: { title: "Quiz Game" },
     registration: {
       subtitle: "Register to join. Enter your first and last name:",
       firstname_ph: "Enter First name",
@@ -114,7 +114,7 @@ const I18N = {
     }
   },
   kk: {
-    app: { title: "🎯 Квиз ойыны" },
+    app: { title: "Квиз ойыны" },
     registration: {
       subtitle: "Қатысу үшін тіркеліңіз. Атыңыз бен тегіңізді енгізіңіз:",
       firstname_ph: "Фамилияңызды енгізіңіз",

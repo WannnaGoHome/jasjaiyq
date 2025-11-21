@@ -59,6 +59,12 @@ body {
   user-select: none;
 }
 
+html[data-theme="light"] h1 {
+  background: none !important;
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+}
+
 .app-container { min-height: 100vh; }
 .container { max-width: 100%; padding: 20px; margin: 0 auto; }
 

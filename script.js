@@ -591,7 +591,7 @@ async function handleOptionClick(index) {
 
     if (res?.isCompleted) {
       console.log("🎬 Викторина завершена сервером");
-      await playEndQuizVideo();
+      // await playEndQuizVideo();
       finishGamePhase();
       return;
     }
@@ -628,7 +628,7 @@ async function handleImageOptionClick(index) {
 
     if (res?.isCompleted) {
       console.log("🎬 Викторина завершена сервером");
-      await playEndQuizVideo();
+      // await playEndQuizVideo();
       finishGamePhase();
       return;
     }

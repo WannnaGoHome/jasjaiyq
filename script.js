@@ -479,7 +479,7 @@ async function checkAndStartGame() {
           showState("game");
         }
 
-        await playCountdownVideoOncePerQuiz(activeQuiz.id);
+        // await playCountdownVideoOncePerQuiz(activeQuiz.id);
 
         nextQuestion();
         startBg(0.18); 
@@ -678,14 +678,17 @@ function nextQuestion() {
   updateQuestionProgressLabel();
 
   let timer = q?.duration_seconds || 25;
-  const fmt = s => `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+  const fmt = s => 
+    `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
   timerEl.textContent = fmt(timer);
+
+  const isOpenQuestion = q?.type === "open"; 
 
   if (intervalId) clearInterval(intervalId);
   intervalId = setInterval(() => {
     timer--;
     timerEl.textContent = fmt(timer);
-    if (timer <= 0) {
+    if (timer <= 0 && !isOpenQuestion) {
       clearInterval(intervalId);
       questionIndex++;
       nextQuestion();
@@ -716,9 +719,20 @@ function nextQuestion() {
 
       submitBtn.onclick = async () => {
         submitBtn.disabled = true;
-        const res = await ApiClient.sendAnswer(telegramId, q.id, q.quiz_id, [textarea.value], currentLang);
+        if (intervalId) {
+          clearInterval(intervalId);
+          intervalId = null;
+        }
+
+        const res = await ApiClient.sendAnswer(
+          telegramId, 
+          q.id, 
+          q.quiz_id, 
+          [textarea.value], 
+          currentLang
+        );
+
         if (res?.isCompleted) {
-          await playEndQuizVideo();
           finishGamePhase();
           return;
         }

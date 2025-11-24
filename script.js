@@ -205,10 +205,6 @@ function applyTranslations(root = document) {
   document.title = t('app.title', lang);
   updateQuestionProgressLabel();
 
-  const imageQuestionText = document.querySelector('#state-game-image #question-text');
-  if (imageQuestionText) {
-    imageQuestionText.textContent = t('game.image_question', lang);
-  }
 }
 
 function quizKey(eventId, quizId) {

@@ -61,7 +61,7 @@ body {
 
 html[data-theme="light"] h1 {
   background: none !important;
-  color: var(--dark-gradient) !important;
+  color: #1565c0 !important;
   -webkit-text-fill-color: #000 !important;
 }
 

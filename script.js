@@ -663,6 +663,20 @@ function nextQuestion() {
   const q = questions[questionIndex];
   if (q?.id != null) askedQuestionIds.add(q.id);
 
+  const hasImages = Array.isArray(q.images_urls) && q.images_urls.length > 0;
+  const isOpenQuestion = q?.type === "open"; 
+
+  
+  if (q.type === "single") {
+    if (hasImages) {
+      showState("game-image");
+    } else {
+      showState("game");
+    }
+  } else {
+    showState("game-open");
+  }
+
   const qTextEl = qs("question-text");
   const curEl   = qs("current-q");
   const totEl   = qs("total-qs");
@@ -678,8 +692,6 @@ function nextQuestion() {
     `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
   timerEl.textContent = fmt(timer);
 
-  const isOpenQuestion = q?.type === "open"; 
-
   if (intervalId) clearInterval(intervalId);
   intervalId = setInterval(() => {
     timer--;
@@ -690,22 +702,16 @@ function nextQuestion() {
       nextQuestion();
     }
   }, 1000);
-
-  const hasImages = Array.isArray(q.images_urls) && q.images_urls.length > 0;
+  
+  qTextEl.textContent = qText(q);
 
   if (q.type === "single") {
     if (hasImages) {
-      showState("game-image");
-      qTextEl.textContent = qText(q);
       renderImageQuestion(q);
     } else {
-      showState("game");
-      qTextEl.textContent = qText(q);
       renderOptions(qOptions(q));
     }
   } else {
-    showState("game-open");
-    qTextEl.textContent = qText(q);
     const textarea = qs("answer-textarea");
     const submitBtn = qs("submit-answer-btn");
     if (textarea && submitBtn) {
@@ -715,6 +721,11 @@ function nextQuestion() {
 
       submitBtn.onclick = async () => {
         submitBtn.disabled = true;
+        textarea.blur();
+        if (document.activeElement && typeof document.activeElement.blur === 'function') {
+          document.activeElement.blur();
+        }
+
         if (intervalId) {
           clearInterval(intervalId);
           intervalId = null;
@@ -798,17 +809,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   applyTranslations(document);
 
-  const nameFields = document.querySelector("#registration-form .name-fields");
-  const langSelect = document.querySelector("#registration-form .lang-select");
+  // const nameFields = document.querySelector("#registration-form .name-fields");
+  // const langSelect = document.querySelector("#registration-form .lang-select");
 
   try {
     console.log("🚀 Проверяем, есть ли пользователь...");
-    const userData = await ApiClient.registerOrGetUser(
-      telegramId,
-      "autouser",
-      "auto",
-      "user"
-    );
+    let userData = null;
+    try {
+      userData = await ApiClient.getUser(telegramId);
+    } catch (err) {
+      if (err.status !== 401 && err.status !== 404) {
+        console.error("getUser error:", err);
+      }
+    }
+    // let userData = await ApiClient.registerOrGetUser(
+    //   telegramId,
+    //   "autouser",
+    //   "auto",
+    //   "user"
+    // );
 
     if (userData && userData.id) {
       console.log("✅ Пользователь найден, автологин:", userData);
